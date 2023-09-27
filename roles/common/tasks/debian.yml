@@ -1,9 +1,17 @@
 ---
-- name: ensure task dependencies
-  sudo: yes
-  apt: pkg={{ item }} state=present
-  with_items:
-    - python-apt
-    - python-pycurl
+- name: Update apt cache
+  become: yes
+  apt:
+    update_cache: yes
+  tags:
+    - common
+
+- name: Ensure task dependencies are installed
+  become: yes
+  apt:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - curl
   tags:
     - common
